@@ -23,7 +23,7 @@ fun TelaSorteio(viewModel: TarefaViewModel = hiltViewModel()) {
     var tarefaSorteada by remember { mutableStateOf<Tarefa?>(null) }
     val tarefasConcluidas = remember { mutableStateListOf<Int>() }
     var mostrarCheck by remember { mutableStateOf(false) }
-    val statusBarPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 
     if (mostrarCheck) {
         LaunchedEffect(tarefaSorteada) {
@@ -38,15 +38,16 @@ fun TelaSorteio(viewModel: TarefaViewModel = hiltViewModel()) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(30.dp + statusBarPadding)
+                    .height(56.dp + statusBarHeight)
                     .background(MaterialTheme.colorScheme.surfaceVariant),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.TopCenter
             ) {
                 Text(
                     text = "Sorteador de Tarefas",
                     fontSize = 24.sp,
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.tertiary
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.padding(top = statusBarHeight)
                 )
             }
         }) { paddingValues ->
@@ -83,9 +84,9 @@ fun TelaSorteio(viewModel: TarefaViewModel = hiltViewModel()) {
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .align(Alignment.Center)
-                            .offset(y = (-80).dp)
                             .padding(horizontal = 24.dp)
                             .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .padding(16.dp)
                     ) {
                         Text(
                             tarefa.emoji,
@@ -104,8 +105,7 @@ fun TelaSorteio(viewModel: TarefaViewModel = hiltViewModel()) {
                                 if (checked) {
                                     mostrarCheck = true
                                 }
-                            }
-                        )
+                            })
                     }
                 }
             }

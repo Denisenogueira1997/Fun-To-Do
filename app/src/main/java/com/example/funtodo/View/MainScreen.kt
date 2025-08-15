@@ -28,22 +28,23 @@ import com.example.funtodo.viewmodel.TarefaViewModel
 
 @Composable
 fun MainScreen(viewModel: TarefaViewModel = hiltViewModel(), onAdicionarClick: () -> Unit = {}) {
-    val statusBarPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
     val listaTarefas by viewModel.tarefas.collectAsState(initial = emptyList())
     Scaffold(
         contentWindowInsets = WindowInsets(0), topBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(30.dp + statusBarPadding)
+                    .height(56.dp + statusBarHeight)
                     .background(MaterialTheme.colorScheme.surfaceVariant),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.TopCenter
             ) {
                 Text(
                     text = "Tarefas Salvas",
                     fontSize = 24.sp,
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.tertiary
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.padding(top = statusBarHeight)
                 )
             }
         }) { paddingValues ->

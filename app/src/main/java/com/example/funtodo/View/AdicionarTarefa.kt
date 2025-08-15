@@ -53,7 +53,7 @@ fun AdicionarTarefa(
     var titulo by remember { mutableStateOf("") }
     var emoji by remember { mutableStateOf("") }
     var mostrarPicker by remember { mutableStateOf(false) }
-    val statusBarPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 
     Scaffold(
         contentWindowInsets = WindowInsets(0),
@@ -61,16 +61,19 @@ fun AdicionarTarefa(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(30.dp + statusBarPadding)
+                    .height(56.dp + statusBarHeight)
                     .background(MaterialTheme.colorScheme.surfaceVariant),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.TopCenter
             ) {
+
                 Text(
                     text = "Adicionar Tarefa",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.secondary,
-                    fontSize = 24.sp
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(top = statusBarHeight)
                 )
+
             }
         },
     ) { paddingValues ->
