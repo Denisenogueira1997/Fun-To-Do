@@ -22,29 +22,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.funtodo.Componentes.ListaTarefas
+import com.example.funtodo.View.Componentes.ListaTarefas
 import com.example.funtodo.viewmodel.TarefaViewModel
 
 
 @Composable
 fun MainScreen(viewModel: TarefaViewModel = hiltViewModel(), onAdicionarClick: () -> Unit = {}) {
-    val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
     val listaTarefas by viewModel.tarefas.collectAsState(initial = emptyList())
     Scaffold(
         contentWindowInsets = WindowInsets(0), topBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp + statusBarHeight)
+                    .height(56.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
                     .background(MaterialTheme.colorScheme.surfaceVariant),
-                contentAlignment = Alignment.TopCenter
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "Tarefas Salvas",
                     fontSize = 24.sp,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.padding(top = statusBarHeight)
                 )
             }
         }) { paddingValues ->
@@ -61,7 +59,6 @@ fun MainScreen(viewModel: TarefaViewModel = hiltViewModel(), onAdicionarClick: (
         ) {
 
             if (listaTarefas.isEmpty()) {
-                // Mensagem quando não há tarefas
                 Box(
                     modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                 ) {
@@ -72,7 +69,6 @@ fun MainScreen(viewModel: TarefaViewModel = hiltViewModel(), onAdicionarClick: (
                     )
                 }
             } else {
-                // Lista de tarefas
                 ListaTarefas(
                     viewModel = viewModel,
                     modifier = Modifier

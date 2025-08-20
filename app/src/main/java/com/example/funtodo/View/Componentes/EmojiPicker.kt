@@ -1,3 +1,4 @@
+import android.R
 import android.view.ContextThemeWrapper
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +17,7 @@ import androidx.emoji2.emojipicker.EmojiPickerView
 @Composable
 fun EmojiPicker(onEmojiSelected: (String) -> Unit) {
     val context = LocalContext.current
-    val themedContext = ContextThemeWrapper(context, android.R.style.Theme_Material_Light)
+    val themedContext = ContextThemeWrapper(context, R.style.Theme_Material_Light)
 
     Surface(
         color = Color.White,

@@ -12,8 +12,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.funtodo.Componentes.BottomNavBar
-import com.example.funtodo.Componentes.NavigationBarItems
+import com.example.funtodo.View.Componentes.BottomNavBar
+import com.example.funtodo.View.Componentes.NavigationBarItems
 import com.example.funtodo.View.AdicionarTarefa
 import com.example.funtodo.View.MainScreen
 import com.example.funtodo.ui.theme.CustomColor

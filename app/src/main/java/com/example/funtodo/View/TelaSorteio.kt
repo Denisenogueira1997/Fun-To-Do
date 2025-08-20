@@ -23,7 +23,7 @@ fun TelaSorteio(viewModel: TarefaViewModel = hiltViewModel()) {
     var tarefaSorteada by remember { mutableStateOf<Tarefa?>(null) }
     val tarefasConcluidas = remember { mutableStateListOf<Int>() }
     var mostrarCheck by remember { mutableStateOf(false) }
-    val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+
 
     if (mostrarCheck) {
         LaunchedEffect(tarefaSorteada) {
@@ -34,21 +34,22 @@ fun TelaSorteio(viewModel: TarefaViewModel = hiltViewModel()) {
         }
     }
     Scaffold(
-        contentWindowInsets = WindowInsets(0), topBar = {
+        contentWindowInsets = WindowInsets(0),
+        topBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp + statusBarHeight)
+                    .height(56.dp + WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
                     .background(MaterialTheme.colorScheme.surfaceVariant),
-                contentAlignment = Alignment.TopCenter
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "Sorteador de Tarefas",
                     fontSize = 24.sp,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.padding(top = statusBarHeight)
-                )
+
+                    )
             }
         }) { paddingValues ->
 
@@ -105,8 +106,7 @@ fun TelaSorteio(viewModel: TarefaViewModel = hiltViewModel()) {
                                 if (checked) {
                                     mostrarCheck = true
                                 }
-                            }
-                        )
+                            })
                     }
                 }
             }

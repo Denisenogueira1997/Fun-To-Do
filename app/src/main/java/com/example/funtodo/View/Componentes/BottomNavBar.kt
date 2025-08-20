@@ -1,4 +1,4 @@
-package com.example.funtodo.Componentes
+package com.example.funtodo.View.Componentes
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
