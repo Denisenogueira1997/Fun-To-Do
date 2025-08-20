@@ -30,7 +30,8 @@ import com.example.funtodo.viewmodel.TarefaViewModel
 fun MainScreen(viewModel: TarefaViewModel = hiltViewModel(), onAdicionarClick: () -> Unit = {}) {
     val listaTarefas by viewModel.tarefas.collectAsState(initial = emptyList())
     Scaffold(
-        contentWindowInsets = WindowInsets(0), topBar = {
+        contentWindowInsets = WindowInsets(0),
+        topBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
