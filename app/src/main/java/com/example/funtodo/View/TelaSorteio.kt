@@ -135,7 +135,8 @@ fun TelaSorteio(viewModel: TarefaViewModel = hiltViewModel(), modifier: Modifier
                                 if (checked) {
                                     mostrarCheck = true
                                 }
-                            })
+                            }
+                        )
                     }
                 }
             }
