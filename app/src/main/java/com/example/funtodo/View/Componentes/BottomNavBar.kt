@@ -17,7 +17,7 @@ fun BottomNavBar(navController: NavController) {
     )
     val rotaAtual = navController.currentBackStackEntryAsState().value?.destination?.route
 
-    NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceVariant) {
+    NavigationBar(containerColor = MaterialTheme.colorScheme.onSurfaceVariant) {
         itensNavegacao.forEach { tela ->
             val selecionado = tela.rota == rotaAtual
 
@@ -36,10 +36,10 @@ fun BottomNavBar(navController: NavController) {
                 label = { Text(tela.label) },
                 alwaysShowLabel = true,
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    selectedIconColor = MaterialTheme.colorScheme.onBackground,
+                    unselectedIconColor = MaterialTheme.colorScheme.surfaceContainer,
+                    selectedTextColor = MaterialTheme.colorScheme.onBackground,
+                    unselectedTextColor = MaterialTheme.colorScheme.surfaceContainer,
                     indicatorColor = MaterialTheme.colorScheme.surfaceVariant
                 )
             )

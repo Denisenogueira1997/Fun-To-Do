@@ -1,6 +1,5 @@
 package com.example.funtodo.View.Componentes
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +30,7 @@ fun ListaTarefas(viewModel: TarefaViewModel = hiltViewModel(), modifier: Modifie
     val tarefas by viewModel.tarefas.collectAsState(initial = emptyList())
 
     LazyColumn(
-        modifier = modifier.fillMaxWidth(), contentPadding = PaddingValues(bottom = 80.dp)
+        modifier = modifier.fillMaxWidth()
     ) {
         items(tarefas) { tarefa ->
             Card(
@@ -39,7 +38,7 @@ fun ListaTarefas(viewModel: TarefaViewModel = hiltViewModel(), modifier: Modifie
                     .padding(vertical = 8.dp)
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onSurface)
             ) {
                 Row(
                     modifier = Modifier
@@ -50,7 +49,7 @@ fun ListaTarefas(viewModel: TarefaViewModel = hiltViewModel(), modifier: Modifie
                     Text(
                         text = tarefa.emoji,
                         style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.tertiary
+                        color = MaterialTheme.colorScheme.background
                     )
 
                     Spacer(modifier = Modifier.width(12.dp))
@@ -59,14 +58,14 @@ fun ListaTarefas(viewModel: TarefaViewModel = hiltViewModel(), modifier: Modifie
                         text = tarefa.titulo,
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.weight(1f),
-                        color = MaterialTheme.colorScheme.tertiary
+                        color = MaterialTheme.colorScheme.background
                     )
 
                     IconButton(onClick = { viewModel.deletarTarefa(tarefa) }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = "Excluir tarefa",
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = MaterialTheme.colorScheme.background
                         )
                     }
                 }

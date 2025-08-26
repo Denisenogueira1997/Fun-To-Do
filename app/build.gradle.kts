@@ -39,7 +39,6 @@ android {
         compose = true
     }
 }
-
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -51,6 +50,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.foundation.android)
+    implementation(libs.androidx.foundation)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -59,28 +60,27 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-
+    // Emoji2
     implementation("androidx.emoji2:emoji2-emojipicker:1.6.0-alpha01")
     implementation("androidx.emoji2:emoji2:1.4.0")
 
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    // Navigation Compose
+    implementation("androidx.navigation:navigation-compose:2.8.0")
 
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 
-// ViewModel
+    // ViewModel + Hilt
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1")
-
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("com.google.android.material:material:1.11.0")
-
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-compiler:2.48")
 
-    // Para ViewModel com Hilt
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    // Material Icons
+    implementation("androidx.compose.material:material-icons-extended")
 
-
+    // Material Components Android (se precisar de Custom Colors)
+    implementation("com.google.android.material:material:1.12.0")
 }
