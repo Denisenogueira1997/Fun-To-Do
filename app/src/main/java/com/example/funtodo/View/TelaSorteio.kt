@@ -59,14 +59,6 @@ fun TelaSorteio(
     var mostrarCheck by remember { mutableStateOf(false) }
     var mensagem by remember { mutableStateOf<String?>(null) }
 
-    if (mostrarCheck) {
-        LaunchedEffect(tarefaSorteada) {
-            delay(1000)
-            tarefaSorteada?.let { tarefasConcluidas.add(it.id) }
-            mostrarCheck = false
-            viewModel.limparTarefaSorteada()
-        }
-    }
 
     Scaffold(
         topBar = {
@@ -176,6 +168,14 @@ fun TelaSorteio(
                         text = msg,
                         color = MaterialTheme.colorScheme.background
                     )
+                }
+            }
+            if (mostrarCheck) {
+                LaunchedEffect(tarefaSorteada) {
+                    delay(1000)
+                    tarefaSorteada?.let { tarefasConcluidas.add(it.id) }
+                    mostrarCheck = false
+                    viewModel.limparTarefaSorteada()
                 }
             }
         }
