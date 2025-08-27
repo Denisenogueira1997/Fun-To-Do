@@ -21,7 +21,8 @@ object AppModule {
     fun provideDatabase(@ApplicationContext appContext: Context): TarefaDatabase {
         return Room.databaseBuilder(
             appContext, TarefaDatabase::class.java, "tarefa_db"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

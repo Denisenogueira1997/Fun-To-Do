@@ -17,4 +17,6 @@ interface TarefaDao {
 
     @Query("SELECT * FROM tarefas ORDER BY id DESC")
     fun listarTodas(): Flow<List<Tarefa>>
+
+
 }

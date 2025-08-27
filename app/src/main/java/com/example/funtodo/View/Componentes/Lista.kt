@@ -3,6 +3,7 @@ package com.example.funtodo.View.Componentes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,7 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.funtodo.viewmodel.TarefaViewModel
 
 @Composable
-fun ListaTarefas(viewModel: TarefaViewModel = hiltViewModel(), modifier: Modifier = Modifier) {
+fun Lista(viewModel: TarefaViewModel = hiltViewModel(), modifier: Modifier = Modifier) {
     val tarefas by viewModel.tarefas.collectAsState(initial = emptyList())
 
     LazyColumn(
@@ -35,8 +36,9 @@ fun ListaTarefas(viewModel: TarefaViewModel = hiltViewModel(), modifier: Modifie
         items(tarefas) { tarefa ->
             Card(
                 modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .fillMaxWidth(),
+                    .padding(vertical = 4.dp)
+                    .fillMaxWidth()
+                    .height(70.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onSurface)
             ) {
@@ -48,7 +50,7 @@ fun ListaTarefas(viewModel: TarefaViewModel = hiltViewModel(), modifier: Modifie
                 ) {
                     Text(
                         text = tarefa.emoji,
-                        style = MaterialTheme.typography.headlineMedium,
+                        style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colorScheme.background
                     )
 

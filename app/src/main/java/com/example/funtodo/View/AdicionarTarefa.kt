@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,6 +43,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.emoji2.emojipicker.EmojiPickerView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.example.funtodo.View.Componentes.BottomNavBar
 import com.example.funtodo.viewmodel.TarefaViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -52,7 +52,9 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdicionarTarefa(
-    viewModel: TarefaViewModel = hiltViewModel(), modifier: Modifier = Modifier
+    navController: NavController,
+    viewModel: TarefaViewModel = hiltViewModel(),
+    modifier: Modifier = Modifier
 ) {
     var titulo by remember { mutableStateOf("") }
     var emoji by remember { mutableStateOf("") }
@@ -76,27 +78,33 @@ fun AdicionarTarefa(
                 )
             )
         },
+        bottomBar = { BottomNavBar(navController) },
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = modifier.fillMaxSize(),
-        contentWindowInsets = WindowInsets(0, 0, 0, 0)
-    ) { padding ->
+        modifier = modifier.fillMaxSize()
+    ) { innerPadding ->
 
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(padding)
-                    .padding(16.dp)
-                    .imePadding(),
+                    .padding(24.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 Spacer(Modifier.height(32.dp))
+
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.background(MaterialTheme.colorScheme.onBackground)
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.onBackground)
+                        .fillMaxWidth()
                 ) {
                     Text(
                         text = emoji,
@@ -106,9 +114,11 @@ fun AdicionarTarefa(
                     )
 
                     Card(
-                        modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onPrimary)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onPrimary),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -179,27 +189,26 @@ fun AdicionarTarefa(
 
                             keyboardController?.hide()
 
-
                             mostrarMensagem = true
                             scope.launch {
                                 delay(2000)
                                 mostrarMensagem = false
                             }
                         }
-                    }, modifier = Modifier.align(Alignment.CenterHorizontally)
+                    }, shape = RoundedCornerShape(16.dp), modifier = Modifier.padding(0.dp)
                 ) {
                     Text("Salvar")
                 }
             }
 
-
             if (mostrarMensagem) {
                 Box(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(bottom = 100.dp)
+                        .padding(bottom = 10.dp)
                         .background(
-                            MaterialTheme.colorScheme.onBackground, RoundedCornerShape(12.dp)
+                            MaterialTheme.colorScheme.onSurfaceVariant,
+                            RoundedCornerShape(12.dp)
                         )
                         .padding(horizontal = 20.dp, vertical = 5.dp),
                     contentAlignment = Alignment.Center
@@ -214,7 +223,5 @@ fun AdicionarTarefa(
         }
     }
 }
-
-
 
 
