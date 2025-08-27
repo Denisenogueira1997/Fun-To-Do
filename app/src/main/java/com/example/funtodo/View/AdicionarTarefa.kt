@@ -1,20 +1,24 @@
 package com.example.funtodo.View
 
+import android.R
+import android.view.ContextThemeWrapper
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.InsertEmoticon
 import androidx.compose.material3.Button
@@ -35,10 +39,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,35 +60,35 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdicionarTarefa(
-    navController: NavController,
-    viewModel: TarefaViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier
+    navController: NavController, viewModel: TarefaViewModel = hiltViewModel()
 ) {
-    var titulo by remember { mutableStateOf("") }
-    var emoji by remember { mutableStateOf("") }
+    var titulo by rememberSaveable { mutableStateOf("") }
+    var emoji by rememberSaveable { mutableStateOf("") }
     var mostrarPicker by remember { mutableStateOf(false) }
     var mostrarMensagem by remember { mutableStateOf(false) }
+    var mostrarErro by remember { mutableStateOf(false) }
 
-    val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val themedContext = ContextThemeWrapper(context, R.style.Theme_Material_Light)
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Adicionar Tarefa",
+                        "Adicionar Tarefa",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
-                }, colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.secondary
-                )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.secondary)
             )
         },
         bottomBar = { BottomNavBar(navController) },
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .consumeWindowInsets(PaddingValues())
     ) { innerPadding ->
@@ -94,91 +100,64 @@ fun AdicionarTarefa(
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(24.dp),
-                verticalArrangement = Arrangement.Center,
+                    .padding(horizontal = 16.dp)
+                    .align(Alignment.Center),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(modifier = Modifier.height(32.dp))
 
-                Spacer(Modifier.height(32.dp))
-
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onPrimary),
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.onBackground)
                         .fillMaxWidth()
+                        .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
                 ) {
-                    Text(
-                        text = emoji,
-                        fontSize = 36.sp,
-                        modifier = Modifier.padding(end = 16.dp),
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-
-                    Card(
-                        shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onPrimary),
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                            .background(MaterialTheme.colorScheme.onPrimary)
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
-                                .background(MaterialTheme.colorScheme.onPrimary)
-                        ) {
-                            TextField(
-                                value = titulo,
-                                onValueChange = { titulo = it },
-                                placeholder = {
-                                    Text(
-                                        "Título da tarefa",
-                                        color = MaterialTheme.colorScheme.background
-                                    )
-                                },
-                                singleLine = true,
-                                modifier = Modifier.weight(1f),
-                                colors = TextFieldDefaults.colors(
-                                    focusedTextColor = MaterialTheme.colorScheme.background,
-                                    unfocusedTextColor = MaterialTheme.colorScheme.background,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                    focusedContainerColor = Color.Transparent,
-                                    unfocusedContainerColor = Color.Transparent,
-                                    disabledContainerColor = Color.Transparent,
-                                    cursorColor = MaterialTheme.colorScheme.primary
-                                )
+                        if (emoji.isNotEmpty()) {
+                            Text(
+                                text = emoji,
+                                fontSize = 28.sp,
+                                modifier = Modifier.padding(end = 8.dp),
+                                color = MaterialTheme.colorScheme.background
                             )
+                        }
 
-                            IconButton(onClick = { mostrarPicker = !mostrarPicker }) {
-                                Icon(
-                                    imageVector = Icons.Default.InsertEmoticon,
-                                    contentDescription = "Selecionar Emoji",
-                                    tint = MaterialTheme.colorScheme.background
+                        TextField(
+                            value = titulo,
+                            onValueChange = { titulo = it },
+                            placeholder = {
+                                Text(
+                                    "Título da tarefa", color = MaterialTheme.colorScheme.background
                                 )
-                            }
+                            },
+                            singleLine = true,
+                            modifier = Modifier.weight(1f),
+                            colors = TextFieldDefaults.colors(
+                                focusedTextColor = MaterialTheme.colorScheme.background,
+                                unfocusedTextColor = MaterialTheme.colorScheme.background,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                disabledContainerColor = Color.Transparent,
+                                cursorColor = MaterialTheme.colorScheme.primary
+                            )
+                        )
+
+                        IconButton(onClick = { mostrarPicker = !mostrarPicker }) {
+                            Icon(
+                                imageVector = Icons.Default.InsertEmoticon,
+                                contentDescription = "Selecionar Emoji",
+                                tint = MaterialTheme.colorScheme.background
+                            )
                         }
                     }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                if (mostrarPicker) {
-                    AndroidView(
-                        factory = { context ->
-                            EmojiPickerView(context).apply {
-                                setOnEmojiPickedListener { emojiSelecionado ->
-                                    emoji = emojiSelecionado.emoji
-                                    mostrarPicker = false
-                                }
-                            }
-                        }, modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp)
-                    )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -190,18 +169,44 @@ fun AdicionarTarefa(
                             titulo = ""
                             emoji = ""
                             mostrarPicker = false
-
                             keyboardController?.hide()
-
                             mostrarMensagem = true
                             scope.launch {
                                 delay(2000)
                                 mostrarMensagem = false
                             }
+                        } else {
+                            mostrarErro = true
+                            scope.launch {
+                                delay(2000)
+                                mostrarErro = false
+                            }
                         }
-                    }, shape = RoundedCornerShape(16.dp), modifier = Modifier.padding(0.dp)
+
+                    }, shape = RoundedCornerShape(16.dp)
                 ) {
                     Text("Salvar")
+                }
+            }
+
+            if (mostrarPicker) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp)
+                        .align(Alignment.BottomCenter)
+                        .background(Color.White)
+                ) {
+                    AndroidView(
+                        factory = {
+                            EmojiPickerView(themedContext).apply {
+                                setOnEmojiPickedListener { e ->
+                                    emoji = e.emoji
+                                    mostrarPicker = false
+                                }
+                            }
+                        }, modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
 
@@ -223,8 +228,24 @@ fun AdicionarTarefa(
                     )
                 }
             }
+            if (mostrarErro) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 10.dp)
+                        .background(
+                            MaterialTheme.colorScheme.onSurfaceVariant, RoundedCornerShape(12.dp)
+                        )
+                        .padding(horizontal = 20.dp, vertical = 5.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Digite um título para a tarefa ❌",
+                        color = MaterialTheme.colorScheme.background,
+                        fontSize = 18.sp
+                    )
+                }
+            }
         }
     }
 }
-
-

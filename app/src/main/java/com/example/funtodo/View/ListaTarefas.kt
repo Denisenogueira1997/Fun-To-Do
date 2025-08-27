@@ -6,11 +6,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -70,10 +75,11 @@ fun ListaTarefas(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(24.dp)
+                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
                 .background(MaterialTheme.colorScheme.surfaceVariant),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
+
 
         ) {
 
@@ -87,17 +93,18 @@ fun ListaTarefas(
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
+
                     ) {
 
                         Text(
                             text = "Nenhuma tarefa salva 😔",
-                            fontSize = 28.sp,
+                            fontSize = 20.sp,
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                         Spacer(modifier = Modifier.height(50.dp))
                         Text(
                             text = ("Adicione uma tarefa 🤠"),
-                            fontSize = 28.sp,
+                            fontSize = 20.sp,
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
