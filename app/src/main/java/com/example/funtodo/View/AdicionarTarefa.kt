@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -80,7 +82,9 @@ fun AdicionarTarefa(
         },
         bottomBar = { BottomNavBar(navController) },
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .consumeWindowInsets(PaddingValues())
     ) { innerPadding ->
 
         Box(
@@ -207,8 +211,7 @@ fun AdicionarTarefa(
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 10.dp)
                         .background(
-                            MaterialTheme.colorScheme.onSurfaceVariant,
-                            RoundedCornerShape(12.dp)
+                            MaterialTheme.colorScheme.onSurfaceVariant, RoundedCornerShape(12.dp)
                         )
                         .padding(horizontal = 20.dp, vertical = 5.dp),
                     contentAlignment = Alignment.Center
