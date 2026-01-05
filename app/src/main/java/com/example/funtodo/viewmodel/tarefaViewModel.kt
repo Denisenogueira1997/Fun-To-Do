@@ -13,30 +13,48 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TarefaViewModel @Inject constructor(private val dao: TarefaDao) : ViewModel() {
+class TarefaViewModel @Inject constructor(
+    private val dao: TarefaDao
+) : ViewModel() {
 
     val tarefas: Flow<List<Tarefa>> = dao.listarTodas()
 
     private val _tarefaSorteada = MutableStateFlow<Tarefa?>(null)
     val tarefaSorteada: StateFlow<Tarefa?> = _tarefaSorteada
 
+    init {
+        restaurarTarefaSorteada()
+    }
+
+    private fun restaurarTarefaSorteada() {
+        viewModelScope.launch {
+            _tarefaSorteada.value = dao.obterTarefaSorteada()
+        }
+    }
+
     fun sortearTarefa(tarefas: List<Tarefa>, tarefasConcluidas: List<Int>) {
-        val pendentes = tarefas.filter { !tarefasConcluidas.contains(it.id) }
-        if (pendentes.isNotEmpty()) {
-            _tarefaSorteada.value = pendentes.random()
-        } else {
-            _tarefaSorteada.value = null
+        viewModelScope.launch {
+            dao.limparTarefaSorteada()
+
+            val pendentes = tarefas.filter { !tarefasConcluidas.contains(it.id) }
+            if (pendentes.isNotEmpty()) {
+                val sorteada = pendentes.random()
+                dao.marcarComoSorteada(sorteada.id)
+                _tarefaSorteada.value = sorteada.copy(sorteada = true)
+            }
         }
     }
 
     fun limparTarefaSorteada() {
-        _tarefaSorteada.value = null
+        viewModelScope.launch {
+            dao.limparTarefaSorteada()
+            _tarefaSorteada.value = null
+        }
     }
 
     fun salvarTarefa(titulo: String, emoji: String) {
-        val novaTarefa = Tarefa(titulo = titulo, emoji = emoji)
         viewModelScope.launch {
-            dao.inserir(novaTarefa)
+            dao.inserir(Tarefa(titulo = titulo, emoji = emoji))
         }
     }
 
@@ -45,5 +63,4 @@ class TarefaViewModel @Inject constructor(private val dao: TarefaDao) : ViewMode
             dao.delete(tarefa)
         }
     }
-
 }
