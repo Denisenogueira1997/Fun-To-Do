@@ -19,8 +19,9 @@ class TarefaViewModel @Inject constructor(
 
     val tarefas: Flow<List<Tarefa>> = dao.listarTodas()
 
-    private val _tarefaSorteada = MutableStateFlow<Tarefa?>(null)
-    val tarefaSorteada: StateFlow<Tarefa?> = _tarefaSorteada
+    private val _tarefasSorteadas = MutableStateFlow<List<Tarefa>>(emptyList())
+    val tarefasSorteadas: StateFlow<List<Tarefa>> = _tarefasSorteadas
+
 
     init {
         restaurarTarefaSorteada()
@@ -28,19 +29,31 @@ class TarefaViewModel @Inject constructor(
 
     private fun restaurarTarefaSorteada() {
         viewModelScope.launch {
-            _tarefaSorteada.value = dao.obterTarefaSorteada()
+            _tarefasSorteadas.value = dao.obterTarefasSorteadas()
         }
     }
 
-    fun sortearTarefa(tarefas: List<Tarefa>, tarefasConcluidas: List<Int>) {
+    fun sortearTarefas(
+        tarefas: List<Tarefa>,
+        tarefasConcluidas: List<Int>
+    ) {
         viewModelScope.launch {
             dao.limparTarefaSorteada()
 
-            val pendentes = tarefas.filter { !tarefasConcluidas.contains(it.id) }
+            val pendentes = tarefas.filter { it.id !in tarefasConcluidas }
+
             if (pendentes.isNotEmpty()) {
-                val sorteada = pendentes.random()
-                dao.marcarComoSorteada(sorteada.id)
-                _tarefaSorteada.value = sorteada.copy(sorteada = true)
+                val sorteadas = pendentes
+                    .shuffled()
+                    .take(3)
+
+                sorteadas.forEach {
+                    dao.marcarComoSorteada(it.id)
+                }
+
+                _tarefasSorteadas.value = sorteadas.map {
+                    it.copy(sorteada = true)
+                }
             }
         }
     }
@@ -48,7 +61,7 @@ class TarefaViewModel @Inject constructor(
     fun limparTarefaSorteada() {
         viewModelScope.launch {
             dao.limparTarefaSorteada()
-            _tarefaSorteada.value = null
+            _tarefasSorteadas.value = emptyList()
         }
     }
 

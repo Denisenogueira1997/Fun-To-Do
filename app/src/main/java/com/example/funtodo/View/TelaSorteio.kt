@@ -1,16 +1,12 @@
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -26,14 +22,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.funtodo.View.Componentes.BottomNavBar
@@ -49,13 +46,13 @@ fun TelaSorteio(
     modifier: Modifier = Modifier
 ) {
     val tarefas by viewModel.tarefas.collectAsState(initial = emptyList())
-    val tarefaSorteada by viewModel.tarefaSorteada.collectAsState()
-    val context = LocalContext.current
+    val tarefasSorteadas by viewModel.tarefasSorteadas.collectAsState()
     val scope = rememberCoroutineScope()
 
     val tarefasConcluidas = remember { mutableStateListOf<Int>() }
-    var mostrarCheck by remember { mutableStateOf(false) }
     var mensagem by remember { mutableStateOf<String?>(null) }
+    val checksConcluidos = remember { mutableStateMapOf<Int, Boolean>() }
+
 
 
     Scaffold(
@@ -98,56 +95,98 @@ fun TelaSorteio(
                             mensagem = null
                         }
                     } else {
-                        viewModel.sortearTarefa(tarefas, tarefasConcluidas)
+                        viewModel.sortearTarefas(tarefas, tarefasConcluidas)
                     }
                 },
                 shape = RoundedCornerShape(24.dp),
                 modifier = Modifier.align(Alignment.Center)
             ) {
-                Text("Sortear Tarefa", color = MaterialTheme.colorScheme.onPrimary)
+                Text("Sortear as Tarefas", color = MaterialTheme.colorScheme.onPrimary)
             }
-
-            tarefaSorteada?.let { tarefa ->
-                if (!tarefasConcluidas.contains(tarefa.id)) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
-                            .background(
-                                MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(12.dp)
-                            )
-                            .height(60.dp)
-                            .padding(horizontal = 12.dp)
-
-                    ) {
+            if (tarefasSorteadas.isNotEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .zIndex(1f)
+                        .background(
+                            MaterialTheme.colorScheme.onPrimary,
+                            RoundedCornerShape(20.dp)
+                        )
+                        .padding(16.dp)
+                ) {
+                    Column {
                         Text(
-                            tarefa.emoji,
-                            style = MaterialTheme.typography.headlineLarge,
+                            "Tarefas Sorteadas 🎯",
+                            style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.background
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            tarefa.titulo,
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.weight(1f),
-                            color = MaterialTheme.colorScheme.background
-                        )
-                        Checkbox(
-                            checked = mostrarCheck, onCheckedChange = { checked ->
-                                if (checked) {
-                                    mostrarCheck = true
-                                    mensagem = "Tarefa concluída!🤠"
-                                    scope.launch {
-                                        delay(2000)
-                                        mensagem = null
-                                    }
+
+                        Spacer(modifier = Modifier.height(12.dp))
+                        tarefasSorteadas.forEach { tarefa ->
+
+                            if (!tarefasConcluidas.contains(tarefa.id)) {
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .background(
+                                            MaterialTheme.colorScheme.onPrimary,
+                                            RoundedCornerShape(12.dp)
+                                        )
+                                        .height(60.dp)
+                                        .padding(horizontal = 12.dp)
+                                ) {
+
+                                    Text(
+                                        tarefa.emoji,
+                                        style = MaterialTheme.typography.headlineLarge,
+                                        color = MaterialTheme.colorScheme.background
+                                    )
+
+                                    Spacer(modifier = Modifier.width(8.dp))
+
+                                    Text(
+                                        tarefa.titulo,
+                                        modifier = Modifier.weight(1f),
+                                        color = MaterialTheme.colorScheme.background
+                                    )
+
+                                    Checkbox(
+                                        checked = checksConcluidos[tarefa.id] == true,
+                                        onCheckedChange = { checked ->
+                                            if (checked) {
+                                                checksConcluidos[tarefa.id] = true
+                                                tarefasConcluidas.add(tarefa.id)
+
+                                                mensagem = "Tarefa concluída! 🤠"
+                                                scope.launch {
+                                                    delay(1500)
+                                                    mensagem = null
+                                                }
+
+                                            }
+                                        }
+                                    )
                                 }
+
+                                Spacer(modifier = Modifier.height(8.dp))
                             }
-                        )
+                        }
                     }
                 }
             }
+
+            LaunchedEffect(tarefasConcluidas.size, tarefasSorteadas.size) {
+                if (
+                    tarefasSorteadas.isNotEmpty() &&
+                    tarefasConcluidas.containsAll(tarefasSorteadas.map { it.id })
+                ) {
+                    viewModel.limparTarefaSorteada()
+                    checksConcluidos.clear()
+                }
+            }
+
+
 
             mensagem?.let { msg ->
                 Box(
@@ -167,14 +206,8 @@ fun TelaSorteio(
                     )
                 }
             }
-            if (mostrarCheck) {
-                LaunchedEffect(tarefaSorteada) {
-                    delay(1000)
-                    tarefaSorteada?.let { tarefasConcluidas.add(it.id) }
-                    mostrarCheck = false
-                    viewModel.limparTarefaSorteada()
-                }
-            }
+
         }
     }
 }
+
