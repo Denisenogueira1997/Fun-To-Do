@@ -78,7 +78,7 @@ fun AdicionarTarefa(
                     Text(
                         "Adicionar Tarefa",
                         style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.secondary)
@@ -105,7 +105,7 @@ fun AdicionarTarefa(
 
                 Card(
                     shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onPrimary),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                     modifier = Modifier
                         .fillMaxWidth()
                         .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
@@ -130,14 +130,15 @@ fun AdicionarTarefa(
                             onValueChange = { titulo = it },
                             placeholder = {
                                 Text(
-                                    "Título da tarefa", color = MaterialTheme.colorScheme.background
+                                    "Título da tarefa",
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             },
                             singleLine = true,
                             modifier = Modifier.weight(1f),
                             colors = TextFieldDefaults.colors(
-                                focusedTextColor = MaterialTheme.colorScheme.background,
-                                unfocusedTextColor = MaterialTheme.colorScheme.background,
+                                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,
                                 focusedContainerColor = Color.Transparent,
@@ -151,7 +152,7 @@ fun AdicionarTarefa(
                             Icon(
                                 imageVector = Icons.Default.InsertEmoticon,
                                 contentDescription = "Selecionar Emoji",
-                                tint = MaterialTheme.colorScheme.background
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }
@@ -213,15 +214,15 @@ fun AdicionarTarefa(
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 10.dp)
                         .background(
-                            MaterialTheme.colorScheme.onSurfaceVariant, RoundedCornerShape(12.dp)
+                            MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(12.dp)
                         )
                         .padding(horizontal = 20.dp, vertical = 5.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "Tarefa salva 🤠",
-                        color = MaterialTheme.colorScheme.background,
-                        fontSize = 20.sp
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 18.sp
                     )
                 }
             }
@@ -231,14 +232,14 @@ fun AdicionarTarefa(
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 10.dp)
                         .background(
-                            MaterialTheme.colorScheme.onSurfaceVariant, RoundedCornerShape(12.dp)
+                            MaterialTheme.colorScheme.errorContainer, RoundedCornerShape(12.dp)
                         )
                         .padding(horizontal = 20.dp, vertical = 5.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "Digite um título para a tarefa ❌",
-                        color = MaterialTheme.colorScheme.background,
+                        color = MaterialTheme.colorScheme.onErrorContainer,
                         fontSize = 18.sp
                     )
                 }

@@ -61,16 +61,17 @@ fun TelaSorteio(
                 title = {
                     Text(
                         text = "Tela de Sorteio",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        style = MaterialTheme.typography.titleLarge
+
                     )
                 }, colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.secondary
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
         },
         bottomBar = { BottomNavBar(navController) },
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        containerColor = MaterialTheme.colorScheme.background,
         modifier = modifier
             .fillMaxSize()
     ) { innerPadding ->
@@ -78,7 +79,7 @@ fun TelaSorteio(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(innerPadding)
 
 
@@ -99,6 +100,7 @@ fun TelaSorteio(
                     }
                 },
                 shape = RoundedCornerShape(24.dp),
+
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Text("Sortear as Tarefas", color = MaterialTheme.colorScheme.onPrimary)
@@ -109,7 +111,7 @@ fun TelaSorteio(
                         .align(Alignment.Center)
                         .zIndex(1f)
                         .background(
-                            MaterialTheme.colorScheme.onPrimary,
+                            MaterialTheme.colorScheme.surface,
                             RoundedCornerShape(20.dp)
                         )
                         .padding(16.dp)
@@ -118,7 +120,7 @@ fun TelaSorteio(
                         Text(
                             "Tarefas Sorteadas 🎯",
                             style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.background
+                            color = MaterialTheme.colorScheme.onSurface
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))
@@ -130,7 +132,7 @@ fun TelaSorteio(
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier
                                         .background(
-                                            MaterialTheme.colorScheme.onPrimary,
+                                            MaterialTheme.colorScheme.surfaceVariant,
                                             RoundedCornerShape(12.dp)
                                         )
                                         .height(60.dp)
@@ -139,8 +141,8 @@ fun TelaSorteio(
 
                                     Text(
                                         tarefa.emoji,
-                                        style = MaterialTheme.typography.headlineLarge,
-                                        color = MaterialTheme.colorScheme.background
+                                        style = MaterialTheme.typography.headlineLarge
+
                                     )
 
                                     Spacer(modifier = Modifier.width(8.dp))
@@ -148,7 +150,7 @@ fun TelaSorteio(
                                     Text(
                                         tarefa.titulo,
                                         modifier = Modifier.weight(1f),
-                                        color = MaterialTheme.colorScheme.background
+                                        color = MaterialTheme.colorScheme.onSurface
                                     )
 
                                     Checkbox(
@@ -194,7 +196,7 @@ fun TelaSorteio(
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 16.dp)
                         .background(
-                            MaterialTheme.colorScheme.onSurfaceVariant,
+                            MaterialTheme.colorScheme.surfaceVariant,
                             RoundedCornerShape(12.dp)
                         )
                         .padding(horizontal = 20.dp, vertical = 8.dp),
@@ -202,7 +204,7 @@ fun TelaSorteio(
                 ) {
                     Text(
                         text = msg,
-                        color = MaterialTheme.colorScheme.background
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }

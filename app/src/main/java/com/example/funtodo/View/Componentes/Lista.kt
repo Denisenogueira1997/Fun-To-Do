@@ -40,7 +40,7 @@ fun Lista(viewModel: TarefaViewModel = hiltViewModel(), modifier: Modifier = Mod
                     .fillMaxWidth()
                     .height(70.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onSurface)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
             ) {
                 Row(
                     modifier = Modifier
@@ -51,7 +51,7 @@ fun Lista(viewModel: TarefaViewModel = hiltViewModel(), modifier: Modifier = Mod
                     Text(
                         text = tarefa.emoji,
                         style = MaterialTheme.typography.headlineSmall,
-                        color = MaterialTheme.colorScheme.background
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
 
                     Spacer(modifier = Modifier.width(12.dp))
@@ -60,14 +60,14 @@ fun Lista(viewModel: TarefaViewModel = hiltViewModel(), modifier: Modifier = Mod
                         text = tarefa.titulo,
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.weight(1f),
-                        color = MaterialTheme.colorScheme.background
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     IconButton(onClick = { viewModel.deletarTarefa(tarefa) }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = "Excluir tarefa",
-                            tint = MaterialTheme.colorScheme.background
+                            tint = MaterialTheme.colorScheme.error
                         )
                     }
                 }

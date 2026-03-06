@@ -39,7 +39,6 @@ import com.example.funtodo.viewmodel.TarefaViewModel
 fun ListaTarefas(
     navController: NavController,
     viewModel: TarefaViewModel = hiltViewModel(),
-    onAdicionarClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val listaTarefas by viewModel.tarefas.collectAsState(initial = emptyList())
@@ -50,7 +49,7 @@ fun ListaTarefas(
                     Text(
                         text = "Lista de Tarefas",
                         style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
 
 
@@ -96,13 +95,13 @@ fun ListaTarefas(
                         Text(
                             text = "Nenhuma tarefa salva 😔",
                             fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.onPrimary
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Spacer(modifier = Modifier.height(50.dp))
                         Text(
                             text = ("Adicione uma tarefa 🤠"),
                             fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.onPrimary
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
